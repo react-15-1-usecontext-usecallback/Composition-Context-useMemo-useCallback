@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
@@ -85,22 +92,21 @@ const User = (props) => {
   );
 };
 
-function getGreeting(name, surname) {
-  console.log(name);
-  if (name.length < 3 || surname.length < 3) {
-    return "Hello new user!!!";
-  }
-  const nameToDisplay =
-    name.substring(0, 1).toUpperCase() + name.substring(1, name.length);
-  const surnameToDisplay =
-    surname.substring(0, 1).toUpperCase() + surname.substring(1, name.length);
-  return `Hello ${nameToDisplay} ${surnameToDisplay}!!!`;
-}
-
 const App = () => {
   const [score, setScore] = useState(0);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
+
+  const getGreeting = useCallback((name, surname) => {
+    if (name.length < 3 || surname.length < 3) {
+      return "Hello new user!!!";
+    }
+    const nameToDisplay =
+      name.substring(0, 1).toUpperCase() + name.substring(1, name.length);
+    const surnameToDisplay =
+      surname.substring(0, 1).toUpperCase() + surname.substring(1, name.length);
+    return `Hello ${nameToDisplay} ${surnameToDisplay}!!!`;
+  }, []);
 
   const addScore = (number) => {
     setScore(score + number);
@@ -110,7 +116,10 @@ const App = () => {
     setScore,
     addScore,
   };
-  const greeting = getGreeting(name, surname);
+  const greeting = useMemo(() => getGreeting(name, surname), [name, surname]);
+  useEffect(() => {
+    console.log(getGreeting(name, surname));
+  }, [name, surname, getGreeting]);
   return (
     <Context.Provider value={value}>
       <div className="App">
