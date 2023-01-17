@@ -2,21 +2,32 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
+const ButtonResset = (props) => {
+  const { setScore } = props;
+  return (
+    <button
+      className="score-button"
+      onClick={() => {
+        setScore(0);
+      }}
+    >
+      Reset
+    </button>
+  );
+};
+
+const CurrentScore = (props) => {
+  return <div className="score">{props.score}</div>;
+};
+
 const Score = (props) => {
   const { score, setScore } = props;
   return (
     <div className="score-container">
       <h1>Your Score</h1>
       <div className="score-wrap">
-        <div className="score">{score}</div>
-        <button
-          className="score-button"
-          onClick={() => {
-            setScore(0);
-          }}
-        >
-          Reset
-        </button>
+        <CurrentScore score={score} />
+        <ButtonResset setScore={setScore} />
       </div>
     </div>
   );
