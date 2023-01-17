@@ -14,13 +14,14 @@ class Form extends React.Component {
     }
   }
 
-  render() {
+  render(children) {
     return (
       <div className="modal" data-closer onClick={this.close.bind(this)}>
         <div className="inner">
           <div className="close" data-closer onClick={this.close.bind(this)}>
             X
           </div>
+          {children ? children : null}
         </div>
       </div>
     );
@@ -32,31 +33,15 @@ class TextForm extends Form {
     super(props);
   }
   render() {
-    return (
-      <div className="modal" data-closer onClick={this.close.bind(this)}>
-        <div className="inner">
-          <div className="close" data-closer onClick={this.close.bind(this)}>
-            X
-          </div>
-          <div>It is a simple text form</div>
-        </div>
-      </div>
-    );
+    return super.render(<div>It is a simple text form</div>);
   }
 }
 
 class PhotoForm extends Form {
   render() {
-    return (
-      <div className="modal" data-closer onClick={this.close.bind(this)}>
-        <div className="inner">
-          <div className="close" data-closer onClick={this.close.bind(this)}>
-            X
-          </div>
-          <div>
-            <img src={img} />
-          </div>
-        </div>
+    return super.render(
+      <div>
+        <img src={img} />
       </div>
     );
   }
@@ -89,7 +74,7 @@ class App extends React.Component {
         <button className="show-button" onClick={this.showModal}>
           Show Form
         </button>
-        {visible && <PhotoForm closeHandler={this.hideModal} />}
+        {visible && <TextForm closeHandler={this.hideModal} />}
       </div>
     );
   }
