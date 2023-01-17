@@ -1,61 +1,79 @@
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-const ButtonResset = (props) => {
-  const { setScore } = props;
+const Context = createContext();
+
+const ButtonResset = () => {
   return (
-    <button
-      className="score-button"
-      onClick={() => {
-        setScore(0);
+    <Context.Consumer>
+      {(store) => {
+        const { setScore } = store;
+        return (
+          <button
+            className="score-button"
+            onClick={() => {
+              setScore(0);
+            }}
+          >
+            Reset
+          </button>
+        );
       }}
-    >
-      Reset
-    </button>
+    </Context.Consumer>
   );
 };
 
-const CurrentScore = (props) => {
-  return <div className="score">{props.score}</div>;
+const CurrentScore = () => {
+  return (
+    <Context.Consumer>
+      {(store) => {
+        return <div className="score">{store.score}</div>;
+      }}
+    </Context.Consumer>
+  );
 };
 
-const Score = (props) => {
-  const { score, setScore } = props;
+const Score = () => {
   return (
     <div className="score-container">
       <h1>Your Score</h1>
       <div className="score-wrap">
-        <CurrentScore score={score} />
-        <ButtonResset setScore={setScore} />
+        <CurrentScore />
+        <ButtonResset />
       </div>
     </div>
   );
 };
 
 const ButtonAdd = (props) => {
-  const { number, addScore } = props;
+  const { number } = props;
   return (
-    <button
-      className="score-button"
-      onClick={() => {
-        addScore(number);
+    <Context.Consumer>
+      {(store) => {
+        return (
+          <button
+            className="score-button"
+            onClick={() => {
+              store.addScore(number);
+            }}
+          >
+            +{number}
+          </button>
+        );
       }}
-    >
-      +{number}
-    </button>
+    </Context.Consumer>
   );
 };
 
-const AddingScore = (props) => {
-  const { addScore } = props;
+const AddingScore = () => {
   return (
     <div className="add-score-container">
       <h1>Add points</h1>
       <div className="score-buttons">
-        <ButtonAdd number={1} addScore={addScore} />
-        <ButtonAdd number={5} addScore={addScore} />
-        <ButtonAdd number={10} addScore={addScore} />
+        <ButtonAdd number={1} />
+        <ButtonAdd number={5} />
+        <ButtonAdd number={10} />
       </div>
     </div>
   );
@@ -66,11 +84,18 @@ const App = () => {
   const addScore = (number) => {
     setScore(score + number);
   };
+  const value = {
+    score,
+    setScore,
+    addScore,
+  };
   return (
-    <div className="App">
-      <Score score={score} setScore={setScore} />
-      <AddingScore addScore={addScore} />
-    </div>
+    <Context.Provider value={value}>
+      <div className="App">
+        <Score />
+        <AddingScore />
+      </div>
+    </Context.Provider>
   );
 };
 
