@@ -10,7 +10,8 @@ class Form extends React.Component {
     }
   }
 
-  render(children) {
+  render() {
+    const { children } = this.props;
     return (
       <div className="modal" data-closer onClick={this.close.bind(this)}>
         <div className="inner">
@@ -24,19 +25,15 @@ class Form extends React.Component {
   }
 }
 
-class TextForm extends Form {
+class Text extends React.Component {
   render() {
-    return super.render(<div>It is a simple text form</div>);
+    return <div>It is a simple text form</div>;
   }
 }
 
-class PhotoForm extends Form {
+class Photo extends React.Component {
   render() {
-    return super.render(
-      <div>
-        <img src={img} />
-      </div>
-    );
+    return <img src={img} />;
   }
 }
 
@@ -67,7 +64,11 @@ class App extends React.Component {
         <button className="show-button" onClick={this.showModal}>
           Show Form
         </button>
-        {visible && <TextForm closeHandler={this.hideModal} />}
+        {visible && (
+          <Form closeHandler={this.hideModal}>
+            <Photo />
+          </Form>
+        )}
       </div>
     );
   }
