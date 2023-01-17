@@ -3,10 +3,6 @@ import React from "react";
 import img from "./marathon.png";
 
 class Form extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   close(e) {
     const { closeHandler } = this.props;
     if (e.target.dataset.closer) {
@@ -29,9 +25,6 @@ class Form extends React.Component {
 }
 
 class TextForm extends Form {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return super.render(<div>It is a simple text form</div>);
   }
