@@ -1,37 +1,27 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
 const Context = createContext();
 
 const ButtonResset = () => {
+  const store = useContext(Context);
+  const { setScore } = store;
   return (
-    <Context.Consumer>
-      {(store) => {
-        const { setScore } = store;
-        return (
-          <button
-            className="score-button"
-            onClick={() => {
-              setScore(0);
-            }}
-          >
-            Reset
-          </button>
-        );
+    <button
+      className="score-button"
+      onClick={() => {
+        setScore(0);
       }}
-    </Context.Consumer>
+    >
+      Reset
+    </button>
   );
 };
 
 const CurrentScore = () => {
-  return (
-    <Context.Consumer>
-      {(store) => {
-        return <div className="score">{store.score}</div>;
-      }}
-    </Context.Consumer>
-  );
+  const store = useContext(Context);
+  return <div className="score">{store.score}</div>;
 };
 
 const Score = () => {
@@ -48,21 +38,16 @@ const Score = () => {
 
 const ButtonAdd = (props) => {
   const { number } = props;
+  const store = useContext(Context);
   return (
-    <Context.Consumer>
-      {(store) => {
-        return (
-          <button
-            className="score-button"
-            onClick={() => {
-              store.addScore(number);
-            }}
-          >
-            +{number}
-          </button>
-        );
+    <button
+      className="score-button"
+      onClick={() => {
+        store.addScore(number);
       }}
-    </Context.Consumer>
+    >
+      +{number}
+    </button>
   );
 };
 
@@ -80,7 +65,7 @@ const AddingScore = () => {
 };
 
 const App = () => {
-  const [score, setScore] = useState(10);
+  const [score, setScore] = useState(0);
   const addScore = (number) => {
     setScore(score + number);
   };
